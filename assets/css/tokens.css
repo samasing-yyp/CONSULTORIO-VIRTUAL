@@ -1,0 +1,110 @@
+/* ==========================================================================
+   Consultoría Digital — Design tokens
+   Paleta inspirada en la bandera de Colombia en tonos suaves:
+   azul oscuro como principal, amarillo y rojo suaves como acentos.
+   ========================================================================== */
+:root {
+  /* Azul (principal) */
+  --navy-950: #0b1a33;
+  --navy-900: #10244a;
+  --navy-800: #16305e;
+  --navy-700: #224480;
+  --navy-500: #4a6fb0;
+  --navy-200: #c9d8f2;
+  --navy-100: #e6eefb;
+  --navy-50:  #f3f7fd;
+
+  /* Amarillo suave */
+  --sun-500: #f2c94c;
+  --sun-400: #f6d77a;
+  --sun-200: #fbeab4;
+  --sun-100: #fdf6dd;
+  --sun-800: #7a5a00;
+
+  /* Rojo suave */
+  --rose-500: #e07a6e;
+  --rose-400: #e8857a;
+  --rose-200: #f6c9c3;
+  --rose-100: #fce9e6;
+  --rose-800: #9c3b30;
+
+  /* Apoyo */
+  --mint-100: #e3f4ec;
+  --mint-700: #1f7a57;
+  --lilac-100: #efeafc;
+  --lilac-700: #5a46a8;
+
+  /* Neutros */
+  --ink-900: #161b26;
+  --ink-700: #343b4a;
+  --ink-600: #4a5263;
+  --ink-500: #646c7d;
+  --ink-400: #8a91a1;
+  --line: #e4e8ef;
+  --line-strong: #d3d9e3;
+  --surface: #f6f8fb;
+  --surface-2: #eef2f7;
+  --bg: #ffffff;
+
+  /* Semánticos */
+  --color-primary: var(--navy-900);
+  --color-primary-hover: var(--navy-800);
+  --color-on-primary: #ffffff;
+  --color-text: var(--ink-900);
+  --color-text-muted: var(--ink-600);
+  --color-text-subtle: var(--ink-500);
+  --color-focus: #3b6fd8;
+
+  /* Tipografía */
+  --font-sans: "Google Sans Flex", "Google Sans", "Figtree", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-doc: "Times New Roman", Times, Georgia, serif;
+  --text-base: 1.0625rem;   /* 17px */
+  --text-sm: 0.9375rem;
+  --text-xs: 0.8125rem;
+  --text-lg: 1.1875rem;
+  --text-xl: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+  --text-2xl: clamp(1.6rem, 1.3rem + 1.2vw, 2.25rem);
+  --text-3xl: clamp(2rem, 1.5rem + 2.2vw, 3.25rem);
+  --text-hero: clamp(2.6rem, 1.6rem + 4.6vw, 5rem);
+  --leading: 1.6;
+  --leading-tight: 1.12;
+  --tracking-tight: -0.02em;
+
+  /* Espaciado */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4.5rem;
+  --space-9: 7rem;
+  --gutter: clamp(1rem, 0.6rem + 2vw, 2rem);
+  --container: 1200px;
+
+  /* Formas */
+  --radius-sm: 10px;
+  --radius: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --radius-pill: 999px;
+
+  /* Sombras (suaves, estilo Google) */
+  --shadow-1: 0 1px 2px rgba(16, 36, 74, 0.06), 0 1px 3px rgba(16, 36, 74, 0.05);
+  --shadow-2: 0 2px 6px rgba(16, 36, 74, 0.06), 0 8px 24px rgba(16, 36, 74, 0.07);
+  --shadow-3: 0 12px 40px rgba(16, 36, 74, 0.12);
+
+  /* Movimiento */
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+  --ease-emph: cubic-bezier(0.05, 0.7, 0.1, 1);
+  --dur-1: 150ms;
+  --dur-2: 260ms;
+  --dur-3: 520ms;
+
+  --header-h: 68px;
+}
+
+/* Preferencia de tamaño de texto (botón "Aa") */
+html[data-text-size="grande"] { font-size: 112.5%; }
+html[data-text-size="muy-grande"] { font-size: 125%; }

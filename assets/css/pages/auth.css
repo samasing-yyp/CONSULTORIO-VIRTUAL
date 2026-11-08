@@ -1,0 +1,117 @@
+/* ==========================================================================
+   Ingresar
+   ========================================================================== */
+.auth-main {
+  background:
+    radial-gradient(40% 50% at 0% 0%, rgba(246, 215, 122, 0.22), transparent 70%),
+    radial-gradient(40% 50% at 100% 100%, rgba(201, 216, 242, 0.5), transparent 70%);
+}
+.auth-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 480px) minmax(0, 1fr);
+  gap: var(--space-7);
+  align-items: stretch;
+  padding-block: var(--space-7);
+  min-height: calc(100vh - var(--header-h));
+}
+.auth-card {
+  align-self: center;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  padding: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+  box-shadow: var(--shadow-2);
+}
+.auth-card h1 { font-size: var(--text-2xl); margin-bottom: var(--space-2); }
+.auth-form { display: grid; gap: var(--space-5); margin-top: var(--space-5); }
+.auth-form .field + .field { margin-top: 0; }
+.pass-wrap { position: relative; }
+.pass-wrap .input { padding-right: 3.5rem; }
+.pass-toggle { position: absolute; right: 4px; top: 50%; transform: translateY(-50%); color: var(--ink-500); }
+.form-error {
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  border-radius: 12px;
+  background: var(--rose-100);
+  color: var(--rose-800);
+  font-size: var(--text-sm);
+}
+.center { text-align: center; }
+.session-notice { margin-top: var(--space-4); }
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: var(--space-6) 0 var(--space-4);
+  color: var(--ink-500);
+  font-size: var(--text-sm);
+}
+.divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+
+.demo-grid { display: grid; gap: var(--space-3); }
+.demo-card {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  border-radius: var(--radius);
+  border: 1px solid var(--line-strong);
+  background: #fff;
+  text-align: left;
+  transition: all var(--dur-2) var(--ease);
+}
+.demo-card:hover { border-color: var(--navy-700); background: var(--navy-50); }
+.demo-card strong { display: block; color: var(--navy-950); }
+.demo-card small { color: var(--ink-500); font-size: var(--text-sm); }
+.demo-card .arrow { color: var(--ink-400); transition: transform var(--dur-2) var(--ease); }
+.demo-card:hover .arrow { transform: translateX(3px); color: var(--navy-800); }
+.demo-icon { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 14px; background: var(--navy-100); color: var(--navy-800); }
+.demo-card.premium .demo-icon { background: var(--sun-100); color: var(--sun-800); }
+.demo-card.is-suggested { border-color: var(--navy-700); box-shadow: 0 0 0 3px var(--navy-100); }
+.demo-hint { margin-top: var(--space-4); }
+.demo-hint code { background: var(--surface-2); padding: 0.1em 0.4em; border-radius: 6px; }
+
+.auth-side {
+  position: relative;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background:
+    radial-gradient(50% 50% at 15% 10%, rgba(246, 215, 122, 0.35), transparent 70%),
+    radial-gradient(50% 50% at 90% 90%, rgba(232, 133, 122, 0.35), transparent 70%),
+    var(--navy-900);
+  color: #fff;
+  display: flex;
+  align-items: flex-end;
+}
+.auth-side::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.14) 1px, transparent 1.4px);
+  background-size: 22px 22px;
+  mask-image: linear-gradient(180deg, #000, transparent 75%);
+}
+.auth-side-inner { position: relative; padding: var(--space-7); }
+.auth-side h2 { color: #fff; font-size: var(--text-2xl); max-width: 18ch; }
+.eyebrow.light { color: var(--sun-400); }
+.side-cards { display: grid; gap: var(--space-3); margin-top: var(--space-6); }
+.side-card {
+  display: flex;
+  gap: var(--space-4);
+  align-items: center;
+  padding: var(--space-4);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(6px);
+}
+.side-card .ms { color: var(--sun-400); }
+.side-card small { display: block; color: var(--navy-200); }
+
+@media (max-width: 900px) {
+  .auth-grid { grid-template-columns: 1fr; min-height: 0; }
+  .auth-card { justify-self: center; width: 100%; max-width: 520px; }
+  .auth-side { display: none; }
+}

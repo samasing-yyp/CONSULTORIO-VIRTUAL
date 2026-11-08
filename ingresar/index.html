@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="es-CO" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <script src="../assets/js/boot.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ingresar · Consultoría Digital</title>
+  <meta name="description" content="Ingresa a tu directorio de herramientas legales.">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@400..700&display=swap">
+  <link rel="stylesheet" data-icons href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0..1,0&icon_names=account_balance,add,apps,arrow_back,arrow_forward,auto_awesome,badge,check,check_circle,chevron_left,chevron_right,close,cloud_done,delete,description,devices,directions_car,domain_add,download,draft,edit,edit_document,error,event_available,expand_more,fact_check,family_restroom,forum,gavel,health_and_safety,help,info,lightbulb,lock,login,logout,menu,menu_book,open_in_new,person,picture_as_pdf,policy,remove,restart_alt,route,schedule,search,search_off,sell,shopping_bag,storefront,table_chart,task_alt,text_increase,timeline,travel_explore,verified_user,visibility,visibility_off,warning,work,workspace_premium&display=block">
+  <link rel="stylesheet" href="../assets/css/tokens.css">
+  <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/pages/auth.css">
+  <script type="module" src="../assets/js/pages/ingresar.js"></script>
+</head>
+<body>
+  <site-header></site-header>
+
+  <main id="contenido" class="auth-main">
+    <div class="container auth-grid">
+      <section class="auth-card" aria-labelledby="titulo-ingresar">
+        <h1 id="titulo-ingresar">Ingresar</h1>
+        <p class="muted">Entra a tu directorio de herramientas legales.</p>
+
+        <div class="notice info session-notice" hidden>
+          <span class="ms" aria-hidden="true">check_circle</span>
+          <div>Ya tienes una sesión abierta como <strong data-session-name></strong>. <a href="../app/">Ir al directorio</a></div>
+        </div>
+
+        <form class="auth-form" novalidate>
+          <div class="field">
+            <label class="field-label" for="email">Correo electrónico</label>
+            <input class="input" id="email" name="email" type="email" autocomplete="username" inputmode="email" required placeholder="tucorreo@ejemplo.com">
+          </div>
+          <div class="field">
+            <label class="field-label" for="password">Contraseña</label>
+            <div class="pass-wrap">
+              <input class="input" id="password" name="password" type="password" autocomplete="current-password" required>
+              <button class="icon-btn pass-toggle" type="button" aria-label="Mostrar contraseña" aria-pressed="false"><span class="ms" aria-hidden="true">visibility</span></button>
+            </div>
+          </div>
+          <p class="form-error" role="alert" hidden></p>
+          <button class="btn btn-primary btn-lg btn-block" type="submit"><span class="ms" aria-hidden="true">login</span><span class="btn-label">Ingresar</span></button>
+          <p class="subtle center">¿Olvidaste tu contraseña? <a href="#" aria-disabled="true" onclick="return false">Recuperarla</a> (próximamente)</p>
+        </form>
+
+        <div class="divider"><span>Acceso de demostración</span></div>
+
+        <div class="demo-grid">
+          <button class="demo-card" type="button" data-demo="basico">
+            <span class="demo-icon"><span class="ms" aria-hidden="true">person</span></span>
+            <span><strong>Demo Básico</strong><small>basico@demo.co</small></span>
+            <span class="ms arrow" aria-hidden="true">arrow_forward</span>
+          </button>
+          <button class="demo-card premium" type="button" data-demo="premium">
+            <span class="demo-icon"><span class="ms fill" aria-hidden="true">workspace_premium</span></span>
+            <span><strong>Demo Premium</strong><small>premium@demo.co</small></span>
+            <span class="ms arrow" aria-hidden="true">arrow_forward</span>
+          </button>
+        </div>
+        <p class="subtle demo-hint">Contraseña de ambas cuentas demo: <code>demo1234</code>. Esta es una versión de prueba: aún no existe registro de cuentas.</p>
+      </section>
+
+      <aside class="auth-side" aria-hidden="true">
+        <div class="auth-side-inner">
+          <span class="eyebrow light">Consultoría Digital</span>
+          <h2>Prepara tu documento hoy. Radícalo en el canal oficial.</h2>
+          <div class="side-cards">
+            <div class="side-card"><span class="ms">edit_document</span><div><strong>Plantillas guiadas</strong><small>Vista previa en vivo y PDF</small></div></div>
+            <div class="side-card"><span class="ms">travel_explore</span><div><strong>Canales oficiales</strong><small>Enlaces directos a entidades</small></div></div>
+            <div class="side-card"><span class="ms">event_available</span><div><strong>Plazos claros</strong><small>Sabes cuándo exigir respuesta</small></div></div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+</body>
+</html>

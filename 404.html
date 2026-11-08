@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="es-CO">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Página no encontrada · Consultoría Digital</title>
+  <script>
+    /*
+     * GitHub Pages sirve este archivo para cualquier ruta inexistente, en
+     * cualquier profundidad. Por eso no usa rutas relativas: calcula la raíz
+     * del sitio y, si la dirección es una de las antiguas (*.html), redirige
+     * a la ruta limpia equivalente conservando ?consulta y #ancla.
+     */
+    (function () {
+      var LEGACY = {
+        'index.html': '', 'precios.html': 'precios/', 'terminos.html': 'terminos/',
+        'ingresar.html': 'ingresar/', 'app/index.html': 'app/',
+        'app/plantillas.html': 'app/plantillas/', 'app/canales.html': 'app/canales/'
+      };
+      var KNOWN = /^(.*?\/)(?:precios|terminos|ingresar|app|index)(?:\.html|\/|$)/;
+      var path = location.pathname;
+      var m = path.match(KNOWN);
+      var base = m ? m[1] : '/';
+      if (!m && /\.github\.io$/.test(location.hostname)) {
+        var seg = path.split('/')[1];
+        if (seg) base = '/' + seg + '/'; // sitio de proyecto: /repositorio/
+      }
+      var rest = path.slice(base.length);
+      if (Object.prototype.hasOwnProperty.call(LEGACY, rest)) {
+        location.replace(base + LEGACY[rest] + location.search + location.hash);
+        return;
+      }
+      window.__BASE__ = base;
+      ['tokens', 'base', 'components'].forEach(function (n) {
+        var l = document.createElement('link');
+        l.rel = 'stylesheet';
+        l.href = base + 'assets/css/' + n + '.css';
+        document.head.appendChild(l);
+      });
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@400..700&display=swap">
+  <style>
+    body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #fff; font-family: "Google Sans Flex", system-ui, sans-serif; color: #161b26; }
+    .nf { text-align: center; padding: 2rem 1rem; max-width: 560px; }
+    .nf .code { font-size: clamp(4.5rem, 3rem + 10vw, 8rem); font-weight: 500; letter-spacing: -0.05em; line-height: 1;
+      background: linear-gradient(100deg, #16305e 10%, #4a6fb0 55%, #e07a6e 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .nf h1 { font-size: 1.6rem; font-weight: 500; margin: 1rem 0 0.5rem; }
+    .nf p { color: #4a5263; line-height: 1.6; margin: 0 0 1.75rem; }
+    .nf .actions { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; }
+    .flag { width: 72px; height: 4px; border-radius: 4px; margin: 2rem auto 0;
+      background: linear-gradient(90deg, #f6d77a 0 50%, #224480 50% 75%, #e8857a 75% 100%); }
+  </style>
+</head>
+<body>
+  <main class="nf">
+    <div class="code" aria-hidden="true">404</div>
+    <h1>No encontramos esta página</h1>
+    <p>Puede que la dirección haya cambiado o tenga un error. Desde el inicio llegas a todas las herramientas.</p>
+    <div class="actions">
+      <a class="btn btn-primary" data-to="">Ir al inicio</a>
+      <a class="btn btn-outline" data-to="app/">Ir al directorio</a>
+    </div>
+    <div class="flag" aria-hidden="true"></div>
+  </main>
+  <script>
+    (function () {
+      function setLinks(base) {
+        document.querySelectorAll('[data-to]').forEach(function (a) { a.href = base + a.getAttribute('data-to'); });
+      }
+      var base = window.__BASE__ || '/';
+      setLinks(base);
+      // Si la raíz fue adivinada (/primer-segmento/), confírmala; si no existe, usa "/".
+      if (base !== '/' && window.fetch) {
+        fetch(base + 'assets/js/boot.js', { method: 'HEAD' })
+          .then(function (r) { if (!r.ok) setLinks('/'); })
+          .catch(function () {});
+      }
+    })();
+  </script>
+</body>
+</html>
