@@ -1,0 +1,13 @@
+# Dependencias y compilación
+node_modules/
+dist/
+.astro/
+
+# Minutas originales (.docx): se quedan solo en el equipo local.
+# El repositorio versiona lo que genera tools/import_minutas.py.
+.assets to learn/
+
+# Sistema
+.DS_Store
+Thumbs.db
+*.log

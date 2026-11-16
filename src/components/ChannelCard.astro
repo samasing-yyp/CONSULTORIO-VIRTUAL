@@ -1,0 +1,44 @@
+---
+/**
+ * Canal oficial.
+ *  variant="card"  tarjeta del buscador de canales
+ *  variant="mini"  fila compacta (áreas, guía y despacho)
+ */
+import Icon from './Icon.astro';
+import { asset } from '../js/core/config.js';
+import { CHANNEL_CATEGORIES } from '../js/data/channels.js';
+
+interface Props {
+  c: { id: string; name: string; sigla: string; service: string; desc: string; category: string; url: string; keywords?: string; logo?: string | null; logoBg?: string; tone?: string; featured?: boolean };
+  variant?: 'card' | 'mini';
+}
+const { c, variant = 'card' } = Astro.props;
+const host = new URL(c.url).hostname.replace(/^www\./, '');
+const cat = CHANNEL_CATEGORIES[c.category];
+const bg = c.logoBg ? `background:${c.logoBg}` : undefined;
+---
+{variant === 'mini' ? (
+  <a class="ch-mini" href={c.url} target="_blank" rel="noopener">
+    <span class="ch-logo" style={bg}>
+      {c.logo ? <img src={asset(`img/logos/${c.logo}`)} alt="" loading="lazy" /> : <span class:list={['mono', c.tone]}>{c.sigla}</span>}
+    </span>
+    <span><strong>{c.name}</strong><small>{c.service}</small></span>
+    <Icon name="open_in_new" />
+  </a>
+) : (
+  <article class="ch-card reveal" data-channel={c.id} data-category={c.category} data-featured={c.featured ? '1' : undefined}>
+    <div class="ch-card-top">
+      <div class="ch-logo-lg" style={bg}>
+        {c.logo ? <img src={asset(`img/logos/${c.logo}`)} alt={`Logo de ${c.name}`} loading="lazy" /> : <span class:list={['mono', c.tone]} aria-hidden="true">{c.sigla}</span>}
+      </div>
+      <span class="badge"><Icon name={cat.icon} />{cat.label}</span>
+    </div>
+    <h3>{c.service}</h3>
+    <p class="ch-entity">{c.name}</p>
+    <p class="ch-desc">{c.desc}</p>
+    <a class="btn btn-secondary btn-block ch-go" href={c.url} target="_blank" rel="noopener" aria-label={`Ir al sitio oficial: ${c.service} (${host}), abre en una pestaña nueva`}>
+      Ir al sitio oficial <Icon name="open_in_new" />
+    </a>
+    <span class="ch-host"><Icon name="lock" />{host}</span>
+  </article>
+)}

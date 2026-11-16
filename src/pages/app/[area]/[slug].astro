@@ -1,0 +1,20 @@
+---
+/** Editor de cada minuta: /app/<área>/<slug>/ (p. ej. /app/salud/tratamiento-integral/). */
+import AppLayout from '../../../layouts/AppLayout.astro';
+import EditorShell from '../../../components/EditorShell.astro';
+import { MINUTAS } from '../../../js/data/minutas/registry.js';
+import { getArea } from '../../../js/data/areas.js';
+import { url } from '../../../js/core/config.js';
+import '../../../styles/pages/plantillas.css';
+
+export function getStaticPaths() {
+  return MINUTAS.map((doc) => {
+    const area = getArea(doc.area);
+    return { params: { area: area.route.split('/').filter(Boolean).pop(), slug: doc.slug }, props: { doc, area } };
+  });
+}
+const { doc, area } = Astro.props;
+---
+<AppLayout title={doc.title} description={doc.summary} footer={false}>
+  <EditorShell doc={doc} back={{ href: url(area.route), label: `Volver a ${area.title}` }} />
+</AppLayout>

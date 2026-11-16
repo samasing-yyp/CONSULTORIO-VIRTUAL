@@ -1,0 +1,16 @@
+---
+/** Editor de cada plantilla general: /app/documentos/<id>/ */
+import AppLayout from '../../../layouts/AppLayout.astro';
+import EditorShell from '../../../components/EditorShell.astro';
+import { GENERAL } from '../../../js/data/catalog.js';
+import { ROUTES, url } from '../../../js/core/config.js';
+import '../../../styles/pages/plantillas.css';
+
+export function getStaticPaths() {
+  return GENERAL.map((doc) => ({ params: { slug: doc.id }, props: { doc } }));
+}
+const { doc } = Astro.props;
+---
+<AppLayout title={doc.title} description={doc.summary} active="documentos" footer={false}>
+  <EditorShell doc={doc} back={{ href: url(ROUTES.documentos), label: 'Volver a documentos' }} />
+</AppLayout>

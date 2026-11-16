@@ -1,0 +1,32 @@
+---
+/**
+ * Ruta antigua del generador. Redirige ?t=<id> a la URL propia del documento
+ * y, sin parámetro, a la galería. Conserva los enlaces viejos y los borradores.
+ */
+import { DOCS } from '../../../js/data/catalog.js';
+import { ROUTES, url } from '../../../js/core/config.js';
+
+const MAP = Object.fromEntries(DOCS.map((d) => [d.id, d.href]));
+const FALLBACK = url(ROUTES.documentos);
+---
+<!doctype html>
+<html lang="es-CO">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex">
+  <title>Redirigiendo…</title>
+  <script is:inline define:vars={{ MAP, FALLBACK }}>
+    (function () {
+      var p = new URLSearchParams(location.search);
+      var t = p.get('t');
+      var to = (t && MAP[t]) || FALLBACK;
+      if (!t && p.get('area')) to += '?area=' + encodeURIComponent(p.get('area'));
+      location.replace(to);
+    })();
+  </script>
+  <noscript><meta http-equiv="refresh" content={`0; url=${FALLBACK}`}></noscript>
+</head>
+<body>
+  <p><a href={FALLBACK}>Ir a los documentos</a></p>
+</body>
+</html>

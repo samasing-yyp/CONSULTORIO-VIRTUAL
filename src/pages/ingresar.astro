@@ -1,0 +1,69 @@
+---
+import PublicLayout from '../layouts/PublicLayout.astro';
+import '../styles/pages/auth.css';
+import { url } from '../js/core/config.js';
+---
+<PublicLayout title='Ingresar' description='Ingresa a tu directorio de herramientas legales.' footer={false}>
+  <main id="contenido" class="auth-main">
+    <div class="container auth-grid">
+      <section class="auth-card" aria-labelledby="titulo-ingresar">
+        <h1 id="titulo-ingresar">Ingresar</h1>
+        <p class="muted">Entra a tu directorio de herramientas legales.</p>
+
+        <div class="notice info session-notice" hidden>
+          <span class="ms" aria-hidden="true">check_circle</span>
+          <div>Ya tienes una sesión abierta como <strong data-session-name></strong>. <a href={url('app/')}>Ir al directorio</a></div>
+        </div>
+
+        <form class="auth-form" novalidate>
+          <div class="field">
+            <label class="field-label" for="email">Correo electrónico</label>
+            <input class="input" id="email" name="email" type="email" autocomplete="username" inputmode="email" required placeholder="tucorreo@ejemplo.com">
+          </div>
+          <div class="field">
+            <label class="field-label" for="password">Contraseña</label>
+            <div class="pass-wrap">
+              <input class="input" id="password" name="password" type="password" autocomplete="current-password" required>
+              <button class="icon-btn pass-toggle" type="button" aria-label="Mostrar contraseña" aria-pressed="false"><span class="ms" aria-hidden="true">visibility</span></button>
+            </div>
+          </div>
+          <p class="form-error" role="alert" hidden></p>
+          <button class="btn btn-primary btn-lg btn-block" type="submit"><span class="ms" aria-hidden="true">login</span><span class="btn-label">Ingresar</span></button>
+          <p class="subtle center">¿Olvidaste tu contraseña? <a href="#" aria-disabled="true">Recuperarla</a> (próximamente)</p>
+        </form>
+
+        <div class="divider"><span>Acceso de demostración</span></div>
+
+        <div class="demo-grid">
+          <button class="demo-card" type="button" data-demo="basico">
+            <span class="demo-icon"><span class="ms" aria-hidden="true">person</span></span>
+            <span><strong>Demo Básico</strong><small>basico@demo.co</small></span>
+            <span class="ms arrow" aria-hidden="true">arrow_forward</span>
+          </button>
+          <button class="demo-card premium" type="button" data-demo="premium">
+            <span class="demo-icon"><span class="ms fill" aria-hidden="true">workspace_premium</span></span>
+            <span><strong>Demo Premium</strong><small>premium@demo.co</small></span>
+            <span class="ms arrow" aria-hidden="true">arrow_forward</span>
+          </button>
+        </div>
+        <p class="subtle demo-hint">Contraseña de ambas cuentas demo: <code>demo1234</code>. Esta es una versión de prueba: aún no existe registro de cuentas.</p>
+      </section>
+
+      <aside class="auth-side" aria-hidden="true">
+        <div class="auth-side-inner">
+          <span class="eyebrow light">Consultoría Digital</span>
+          <h2>Prepara tu documento hoy. Radícalo en el canal oficial.</h2>
+          <div class="side-cards">
+            <div class="side-card"><span class="ms">edit_document</span><div><strong>Plantillas guiadas</strong><small>Vista previa en vivo y PDF</small></div></div>
+            <div class="side-card"><span class="ms">travel_explore</span><div><strong>Canales oficiales</strong><small>Enlaces directos a entidades</small></div></div>
+            <div class="side-card"><span class="ms">event_available</span><div><strong>Plazos claros</strong><small>Sabes cuándo exigir respuesta</small></div></div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+</PublicLayout>
+
+<script>
+  import '../js/pages/ingresar.js';
+</script>

@@ -1,23 +1,22 @@
 #!/usr/bin/env node
 /**
- * Verifica que todas las rutas internas existan con las mayúsculas exactas
- * (GitHub Pages distingue mayúsculas; Windows no).
+ * Verifica el sitio compilado (dist/) tal como lo servirá GitHub Pages:
+ *  - cada href/src interno apunta a un archivo que existe (con mayúsculas exactas);
+ *  - no se publican archivos .docx ni la carpeta «.assets to learn»;
+ *  - las páginas de /app/ llevan noindex.
+ * El «base» (p. ej. /CONSULTORIO-VIRTUAL/) se detecta desde dist/index.html.
  *
- * Revisa: href/src relativos en las páginas HTML, imports de los módulos JS,
- * los logos de channels.js y que cada ruta de ROUTES tenga su index.html.
- *
- * Uso:  node tools/check-links.mjs
+ * Uso:  node tools/check-links.mjs [dist]     (corre solo después de npm run build)
  */
 import { readdir, readFile } from 'node:fs/promises';
-import { join, dirname, relative, sep, posix } from 'node:path';
+import { join, relative, sep, posix } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
-const SKIP = new Set(['node_modules', '.git', '.claude']);
+const DIST = join(ROOT, process.argv[2] || 'dist');
 
 async function walk(dir, out = []) {
   for (const e of await readdir(dir, { withFileTypes: true })) {
-    if (SKIP.has(e.name) || (dir === ROOT && e.name === 'tools')) continue;
     const p = join(dir, e.name);
     if (e.isDirectory()) await walk(p, out);
     else out.push(p);
@@ -25,49 +24,35 @@ async function walk(dir, out = []) {
   return out;
 }
 
-const files = await walk(ROOT);
-const known = new Set(files.map((f) => relative(ROOT, f).split(sep).join('/')));
+const files = await walk(DIST);
+const known = new Set(files.map((f) => relative(DIST, f).split(sep).join('/')));
 const problems = [];
 
-/** Resuelve `ref` desde el archivo `from` y comprueba que exista exactamente. */
-function check(from, ref) {
-  const clean = ref.split(/[?#]/)[0];
-  if (!clean) return;
-  const base = posix.dirname(relative(ROOT, from).split(sep).join('/'));
-  let target = posix.normalize(posix.join(base, clean));
-  if (clean.endsWith('/') || target === '.') target = posix.join(target, 'index.html');
-  if (target.startsWith('..') || !known.has(target)) problems.push(`${relative(ROOT, from)} → ${ref}`);
-}
+const home = await readFile(join(DIST, 'index.html'), 'utf8');
+const base = (home.match(/src="([^"]*)assets\/js\/boot\.js"/) || [, '/'])[1];
 
 for (const f of files) {
-  if (f.endsWith('.html') && !f.endsWith('404.html')) {
-    const src = await readFile(f, 'utf8');
-    for (const m of src.matchAll(/(?:href|src)="([^"]+)"/g)) {
-      const ref = m[1];
-      if (/^(https?:|mailto:|tel:|#|data:|\?)/.test(ref) || ref.includes('${')) continue;
-      check(f, ref);
-    }
+  const rel = relative(DIST, f).split(sep).join('/');
+  if (/\.docx$/i.test(rel) || rel.includes('.assets to learn')) problems.push(`publicaría un archivo privado: ${rel}`);
+  if (!rel.endsWith('.html')) continue;
+  const html = await readFile(f, 'utf8');
+  if (rel.startsWith('app/') && !/<meta name="robots" content="noindex/.test(html)) problems.push(`${rel}: falta noindex`);
+  const pagePath = base + rel.replace(/index\.html$/, '');
+  for (const m of html.matchAll(/(?:href|src)="([^"]+)"/g)) {
+    const ref = m[1].replace(/&amp;/g, '&');
+    if (/^(https?:|mailto:|tel:|#|data:|javascript:|\?)/.test(ref) || ref.includes('${')) continue;
+    const abs = ref.startsWith('/') ? ref : posix.join(posix.dirname(pagePath.endsWith('/') ? pagePath + 'x' : pagePath), ref);
+    let path = abs.split(/[?#]/)[0];
+    if (!path.startsWith(base)) { problems.push(`${rel} → ${ref} (fuera del base ${base})`); continue; }
+    path = decodeURI(path.slice(base.length));
+    if (path === '' || path.endsWith('/')) path += 'index.html';
+    if (!known.has(path)) problems.push(`${rel} → ${ref}`);
   }
-  if (f.endsWith('.js') && f.includes(`${sep}assets${sep}js${sep}`)) {
-    const src = await readFile(f, 'utf8');
-    for (const m of src.matchAll(/(?:from\s+|import\(\s*)'(\.{1,2}\/[^']+)'/g)) check(f, m[1]);
-  }
-}
-
-const channels = await readFile(join(ROOT, 'assets/js/data/channels.js'), 'utf8');
-for (const m of channels.matchAll(/logo: '([^']+)'/g)) {
-  if (!known.has(`assets/img/logos/${m[1]}`)) problems.push(`channels.js → logo ${m[1]}`);
-}
-
-const config = await readFile(join(ROOT, 'assets/js/core/config.js'), 'utf8');
-const routes = config.match(/export const ROUTES = \{([\s\S]*?)\};/)[1];
-for (const m of routes.matchAll(/:\s*'([^']*)'/g)) {
-  const page = posix.join(posix.normalize(m[1] || '.'), 'index.html');
-  if (!known.has(page)) problems.push(`ROUTES → ${m[1]} (falta ${page})`);
 }
 
 if (problems.length) {
-  console.error(`✗ ${problems.length} ruta(s) rota(s):\n  ` + problems.join('\n  '));
+  console.error(`✗ ${problems.length} problema(s) en ${relative(ROOT, DIST)}/:\n  ` + [...new Set(problems)].slice(0, 60).join('\n  '));
   process.exit(1);
 }
-console.log(`✓ Rutas verificadas en ${files.filter((f) => /\.(html|js)$/.test(f)).length} archivos. Sin enlaces rotos.`);
+const pages = files.filter((f) => f.endsWith('.html')).length;
+console.log(`✓ ${pages} páginas verificadas (base ${base}). Sin enlaces rotos, sin .docx, /app/ con noindex.`);

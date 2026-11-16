@@ -1,0 +1,88 @@
+---
+/**
+ * Galería de documentos: 8 plantillas generales + 93 minutas por área.
+ * Vista agrupada por defecto; al buscar o filtrar se usa la lista completa.
+ */
+import AppLayout from '../../../layouts/AppLayout.astro';
+import Icon from '../../../components/Icon.astro';
+import DocCard from '../../../components/DocCard.astro';
+import { GENERAL, DOCS, CATEGORIES } from '../../../js/data/catalog.js';
+import { AREAS } from '../../../js/data/areas.js';
+import { minutasOf } from '../../../js/data/minutas/registry.js';
+import { url } from '../../../js/core/config.js';
+import '../../../styles/pages/plantillas.css';
+
+const count = (k) => DOCS.filter((d) => d.category === k).length;
+const chips = [
+  ...Object.entries(CATEGORIES).map(([k, l]) => ({ k, l, n: k === 'todas' ? DOCS.length : count(k), icon: null })),
+  ...AREAS.map((a) => ({ k: a.id, l: a.title, icon: a.icon, n: count(a.id) })),
+];
+---
+<AppLayout title="Documentos" active="documentos" description="Plantillas y minutas para preparar documentos legales con vista previa y descarga en PDF.">
+  <main id="contenido" data-gallery>
+    <section class="app-hero">
+      <div class="container">
+        <span class="eyebrow"><Icon name="edit_document" />Documentos con plantilla</span>
+        <h1>¿Qué documento necesitas?</h1>
+        <p class="lead muted">{DOCS.length} plantillas y minutas. Elige una, responde preguntas sencillas y descarga el PDF listo para radicar.</p>
+        <div class="gal-tools">
+          <label class="search-field">
+            <Icon name="search" />
+            <span class="visually-hidden">Buscar documento</span>
+            <input type="search" data-q placeholder="Describe tu caso: «me cortaron el agua», «fotomulta», «incapacidad»…" autocomplete="off">
+          </label>
+          <div class="chip-row" role="toolbar" aria-label="Categorías">
+            {chips.map((c) => (
+              <button class="chip" type="button" data-cat={c.k} aria-pressed={c.k === 'todas' ? 'true' : 'false'}>
+                {c.icon && <Icon name={c.icon} />}{c.l}<span class="count">{c.n}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="app-section">
+      <div class="container">
+        <div data-grouped>
+          <div class="gal-group">
+            <div class="app-section-head"><h2>Documentos generales</h2></div>
+            <div class="gal-grid">{GENERAL.map((d, i) => <DocCard doc={d} delay={Math.min(i, 8) * 35} />)}</div>
+          </div>
+          {AREAS.map((a) => {
+            const items = minutasOf(a.id);
+            return (
+              <div class="gal-group">
+                <div class="app-section-head">
+                  <div class="gal-group-title">
+                    <span class:list={['card-icon', a.tone]}><Icon name={a.icon} /></span>
+                    <div><h2>{a.title}</h2><p class="subtle">{a.tagline}</p></div>
+                  </div>
+                  <a class="btn btn-ghost btn-sm" href={url(a.route)}>Ver la sección<Icon name="arrow_forward" /></a>
+                </div>
+                <div class="gal-grid">{items.slice(0, 6).map((d, i) => <DocCard doc={d} delay={i * 35} />)}</div>
+                <button class="btn btn-secondary btn-sm gal-more" type="button" data-show={a.id}>Ver los {items.length} documentos de {a.title.toLowerCase()}</button>
+              </div>
+            );
+          })}
+        </div>
+
+        <div data-flat hidden>
+          {AREAS.map((a) => (
+            <div class="notice info gal-area-note" data-area-note={a.id} hidden>
+              <Icon name={a.icon} /><div><strong>{a.title}:</strong> {a.intro} <a href={url(a.route)}>Ver ruta, plazos y entidades</a></div>
+            </div>
+          ))}
+          <div class="gal-grid" data-flat-grid>{DOCS.map((d) => <DocCard doc={d} />)}</div>
+          <div class="empty-state" data-empty hidden>
+            <Icon name="search" /><span>No encontramos documentos con «<span data-empty-q></span>». Prueba con otras palabras.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</AppLayout>
+
+<script>
+  import '../../../js/pages/gallery.js';
+</script>

@@ -1,0 +1,20 @@
+---
+/** Páginas públicas: encabezado con Inicio, Precios y Términos, y pie de página. */
+import BaseLayout from './BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  active?: string;
+  footer?: boolean;
+  noindex?: boolean;
+}
+const { title, description, active, footer = true, noindex = false } = Astro.props;
+---
+<BaseLayout title={title} description={description} noindex={noindex}>
+  <Header active={active} />
+  <slot />
+  {footer && <Footer />}
+</BaseLayout>

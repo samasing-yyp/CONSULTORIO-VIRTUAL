@@ -1,0 +1,6 @@
+---
+/** Ícono de Material Symbols. <Icon name="search" /> · <Icon name="lock" fill /> */
+interface Props { name: string; fill?: boolean; class?: string }
+const { name, fill = false, class: cls = '' } = Astro.props;
+---
+<span class:list={['ms', { fill }, cls]} aria-hidden="true">{name}</span>

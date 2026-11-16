@@ -1,0 +1,26 @@
+{
+  "name": "consultoria-digital",
+  "version": "0.3.0",
+  "private": true,
+  "type": "module",
+  "description": "Directorio de herramientas legales para Colombia. Sitio estático generado con Astro y publicado en GitHub Pages.",
+  "scripts": {
+    "dev": "astro dev",
+    "prebuild": "node tools/icons.mjs",
+    "build": "astro build",
+    "postbuild": "node tools/check-links.mjs dist",
+    "preview": "astro preview",
+    "check": "astro check",
+    "minutas": "python tools/import_minutas.py"
+  },
+  "engines": {
+    "node": ">=22.23.4"
+  },
+  "dependencies": {
+    "astro": "7.4.4"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.11",
+    "typescript": "5.9.3"
+  }
+}

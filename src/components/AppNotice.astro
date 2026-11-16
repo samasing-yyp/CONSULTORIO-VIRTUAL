@@ -1,0 +1,12 @@
+---
+/** Aviso persistente de la zona de herramientas: no somos canal oficial. */
+import Icon from './Icon.astro';
+import { ROUTES, url } from '../js/core/config.js';
+---
+<div class="app-notice" role="note">
+  <div class="container">
+    <Icon name="info" />
+    <span><strong>Herramienta de apoyo, no canal oficial.</strong> Tus trámites se radican ante cada entidad.
+    <a href={url(ROUTES.canales)}>Ver canales oficiales</a></span>
+  </div>
+</div>

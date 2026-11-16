@@ -1,0 +1,41 @@
+---
+/**
+ * Encabezado de la zona con sesión. El nombre y el plan del usuario los pone
+ * src/scripts/chrome.js (vienen del almacenamiento local del navegador).
+ */
+import BrandMark from './BrandMark.astro';
+import Icon from './Icon.astro';
+import { APP, ROUTES, url } from '../js/core/config.js';
+
+interface Props { active?: string }
+const { active } = Astro.props;
+const links = [
+  ['directorio', 'Directorio', ROUTES.app],
+  ['documentos', 'Documentos', ROUTES.documentos],
+  ['canales', 'Canales oficiales', ROUTES.canales],
+];
+---
+<div class="chrome-header">
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+  <header class="site-header app" data-chrome>
+    <div class="container">
+      <a class="brand" href={url(ROUTES.app)} aria-label={`${APP.name}, directorio`}><BrandMark /><span>{APP.name}</span></a>
+      <button class="icon-btn menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav-app"><Icon name="menu" /></button>
+      <nav class="nav" id="nav-app" aria-label="Herramientas">
+        {links.map(([id, label, route]) => (
+          <a href={url(route)} aria-current={id === active ? 'page' : undefined}>{label}</a>
+        ))}
+        <div class="mobile-only app-user-mobile">
+          <div class="app-user"><span data-user-badge></span><span data-user-name></span></div>
+          <button class="btn btn-outline btn-block" type="button" data-action="text-size"><Icon name="text_increase" />Tamaño de texto</button>
+          <button class="btn btn-secondary btn-block" type="button" data-action="logout"><Icon name="logout" />Cerrar sesión</button>
+        </div>
+      </nav>
+      <div class="header-actions desktop-only">
+        <div class="app-user" data-user-email-title><span data-user-badge></span><span class="app-user-name" data-user-name></span></div>
+        <button class="icon-btn" type="button" data-action="text-size" title="Cambiar tamaño de texto" aria-label="Cambiar tamaño de texto"><Icon name="text_increase" /></button>
+        <button class="icon-btn" type="button" data-action="logout" title="Cerrar sesión" aria-label="Cerrar sesión"><Icon name="logout" /></button>
+      </div>
+    </div>
+  </header>
+</div>

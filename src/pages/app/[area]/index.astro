@@ -1,0 +1,167 @@
+---
+/**
+ * Sección de un área (salud, servicios públicos, tránsito), generada al compilar
+ * desde src/js/data/areas.js y el índice de minutas. En el navegador solo
+ * corren el buscador y los candados del plan.
+ */
+import AppLayout from '../../../layouts/AppLayout.astro';
+import Icon from '../../../components/Icon.astro';
+import ChannelCard from '../../../components/ChannelCard.astro';
+import { AREAS } from '../../../js/data/areas.js';
+import { minutasOf } from '../../../js/data/minutas/registry.js';
+import { getChannel } from '../../../js/data/channels.js';
+import { ROUTES, url } from '../../../js/core/config.js';
+import { norm } from '../../../js/core/ui.js';
+import '../../../styles/pages/plantillas.css';
+import '../../../styles/pages/area.css';
+
+export function getStaticPaths() {
+  return AREAS.map((area) => ({ params: { area: area.route.split('/').filter(Boolean).pop() }, props: { area } }));
+}
+
+const { area } = Astro.props;
+const all = minutasOf(area.id);
+const byCode = Object.fromEntries(all.map((m) => [m.code, m]));
+const channels = area.channels.map(getChannel).filter(Boolean);
+const stages = area.stages.map((st) => ({ ...st, items: all.filter((m) => m.stage === st.id) })).filter((st) => st.items.length);
+const example = all[0]?.situation?.toLowerCase() || 'reclamo';
+const canalesCat = area.id;
+---
+<AppLayout title={area.title} description={area.intro}>
+  <main id="contenido" data-area-page>
+    <section class:list={['area-hero', `tone-${area.tone}`]}>
+      <div class="container">
+        <a class="crumb" href={url(ROUTES.app)}><Icon name="arrow_back" />Directorio</a>
+        <div class="area-head">
+          <span class="area-icon"><Icon name={area.icon} /></span>
+          <div>
+            <h1>{area.title}</h1>
+            <p class="lead">{area.intro}</p>
+          </div>
+        </div>
+        <div class="area-stats">
+          <span><strong>{all.length}</strong> documentos</span>
+          <span><strong>{area.stages.length}</strong> etapas</span>
+          <span><strong>{channels.length}</strong> entidades relacionadas</span>
+        </div>
+        <label class="search-field area-search">
+          <Icon name="search" />
+          <span class="visually-hidden">Buscar en {area.title}</span>
+          <input type="search" data-q placeholder={`¿Qué te pasó? Ej.: «${example}»`} autocomplete="off">
+        </label>
+      </div>
+    </section>
+
+    <div class="container area-layout">
+      <nav class="area-toc" aria-label={`Secciones de ${area.title}`}>
+        <a href="#situaciones"><Icon name="help" />¿Qué te pasó?</a>
+        <a href="#ruta"><Icon name="route" />Ruta recomendada</a>
+        <a href="#plazos"><Icon name="schedule" />Plazos clave</a>
+        <a href="#normas"><Icon name="balance" />Normas y advertencias</a>
+        <a href="#entidades"><Icon name="account_balance" />Entidades</a>
+        <a href="#abogado"><Icon name="support_agent" />Cuándo buscar abogado</a>
+      </nav>
+
+      <div class="area-body">
+        <div class="notice info"><Icon name="info" /><div>{area.context}</div></div>
+
+        <section id="situaciones" class="area-section">
+          <h2>¿Qué te pasó?</h2>
+          <p class="muted">Elige la situación que más se parece a la tuya. Cada una abre su documento listo para llenar.</p>
+          <div class="empty-state" data-empty hidden><Icon name="search_off" /><span>No encontramos esa situación. Prueba otras palabras o busca en <a href={url(ROUTES.documentos)}>todos los documentos</a>.</span></div>
+          {stages.map((st) => (
+            <div class="stage reveal" data-stage>
+              <div class="stage-head"><h3>{st.title}</h3><span class="subtle">{st.desc}</span></div>
+              <div class="sit-list">
+                {st.items.map((m) => (
+                  <a class="sit-row" href={m.href} data-plan={m.plan} data-search={norm(`${m.title} ${m.situation} ${m.summary} ${m.entity} ${m.code}`)}>
+                    <span class="sit-main">
+                      <strong>{m.situation || m.title}</strong>
+                      <span class="sit-doc"><Icon name="description" />{m.title}</span>
+                    </span>
+                    <span class="sit-meta">
+                      {m.entity && <span class="sit-entity">{m.entity}</span>}
+                      {m.deadline && <span class="sit-deadline"><Icon name="schedule" />{m.deadline}</span>}
+                    </span>
+                    <span class="sit-end">
+                      {m.plan === 'premium' && <span class="badge badge-premium" data-plan-badge><Icon name="workspace_premium" fill />Premium</span>}
+                      {m.lawyer && <span class="badge badge-rose">Con abogado</span>}
+                      <Icon name="chevron_right" />
+                    </span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          ))}
+        </section>
+
+        <section id="ruta" class="area-section reveal">
+          <h2>Ruta recomendada</h2>
+          <p class="muted">El orden que suele funcionar mejor. No siempre hay que pasar por todos los pasos.</p>
+          <ol class="route">
+            {area.route_steps.map((r) => {
+              const m = r.code ? byCode[r.code] : null;
+              return (
+                <li>
+                  <div class="route-dot"></div>
+                  <div class="route-body">
+                    <strong>{r.title}</strong>
+                    <p>{r.text}</p>
+                    {m
+                      ? <a class="btn btn-secondary btn-sm" href={m.href}><Icon name="edit_document" />Usar «{m.title}»</a>
+                      : <span class="badge badge-rose">Con abogado</span>}
+                  </div>
+                </li>
+              );
+            })}
+          </ol>
+        </section>
+
+        <section id="plazos" class="area-section reveal">
+          <h2>Plazos clave</h2>
+          <div class="compare-wrap">
+            <table class="compare deadlines">
+              <thead><tr><th scope="col">Trámite</th><th scope="col">Plazo</th></tr></thead>
+              <tbody>{area.deadlines.map(([a, b]) => <tr><th scope="row">{a}</th><td>{b}</td></tr>)}</tbody>
+            </table>
+          </div>
+          <p class="subtle">Los días hábiles no cuentan sábados, domingos ni festivos. Verifica siempre el plazo con la norma vigente.</p>
+        </section>
+
+        <section id="normas" class="area-section reveal">
+          <h2>Normas y advertencias</h2>
+          <div class="two-col">
+            <div class="card">
+              <h3><Icon name="balance" />Lo que dice la ley</h3>
+              <ul class="tick-list">{area.rules.map((r) => <li>{r}</li>)}</ul>
+            </div>
+            <div class="card warn">
+              <h3><Icon name="warning" />Ten en cuenta</h3>
+              <ul class="tick-list">{area.warnings.map((r) => <li>{r}</li>)}</ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="entidades" class="area-section reveal">
+          <h2>Entidades relacionadas</h2>
+          <p class="muted">Canales oficiales donde se radican, vigilan o consultan estos trámites.</p>
+          <div class="channel-grid">{channels.map((c) => <ChannelCard c={c} variant="mini" />)}</div>
+          <a class="btn btn-ghost btn-sm" href={`${url(ROUTES.canales)}?cat=${canalesCat}`}>Ver más canales<Icon name="arrow_forward" /></a>
+        </section>
+
+        <section id="abogado" class="area-section reveal">
+          <h2>Cuándo buscar un abogado</h2>
+          <div class="card lawyer">
+            <p>Estos casos no se resuelven con una minuta: requieren representación profesional.</p>
+            <ul class="tick-list">{area.lawyer.map((r) => <li>{r}</li>)}</ul>
+            <p class="subtle">Orientación gratuita: Defensoría del Pueblo, la personería de tu municipio o un consultorio jurídico universitario.</p>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+</AppLayout>
+
+<script>
+  import '../../../js/pages/area.js';
+</script>

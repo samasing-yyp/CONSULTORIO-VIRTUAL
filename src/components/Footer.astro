@@ -1,0 +1,51 @@
+---
+import BrandMark from './BrandMark.astro';
+import Icon from './Icon.astro';
+import { APP, ROUTES, url } from '../js/core/config.js';
+
+const year = new Date().getFullYear();
+const oficiales = [
+  ['gov.co', 'https://www.gov.co'],
+  ['Tutela en Línea', 'https://procesojudicial.ramajudicial.gov.co/TutelaEnLinea'],
+  ['Policía Nacional', 'https://www.policia.gov.co'],
+];
+---
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <a class="brand" href={url(ROUTES.home)} aria-label={`${APP.name}, inicio`}><BrandMark /><span>{APP.name}</span></a>
+        <p style="margin-top:var(--space-4);max-width:36ch">{APP.tagline}. Herramientas de apoyo: no somos una entidad pública ni un canal oficial de trámites.</p>
+        <div class="flag-line" aria-hidden="true"></div>
+      </div>
+      <div>
+        <h4>Producto</h4>
+        <ul>
+          <li><a href={url(ROUTES.home)}>Inicio</a></li>
+          <li><a href={url(ROUTES.precios)}>Precios</a></li>
+          <li><a href={url(ROUTES.ingresar)}>Ingresar</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Legal</h4>
+        <ul>
+          <li><a href={`${url(ROUTES.terminos)}#terminos`}>Términos de uso</a></li>
+          <li><a href={`${url(ROUTES.terminos)}#habeas-data`}>Habeas data</a></li>
+          <li><a href={`${url(ROUTES.terminos)}#archivos`}>Alojamiento de archivos</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Canales oficiales</h4>
+        <ul>
+          {oficiales.map(([label, href]) => (
+            <li><a href={href} target="_blank" rel="noopener">{label} <Icon name="open_in_new" /></a></li>
+          ))}
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© {year} {APP.name} · Versión {APP.version}</span>
+      <span>Hecho en Colombia para que más personas conozcan sus derechos.</span>
+    </div>
+  </div>
+</footer>

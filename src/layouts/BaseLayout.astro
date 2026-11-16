@@ -1,0 +1,54 @@
+---
+/**
+ * Documento base de todas las páginas: <head> común (metadatos, fuentes,
+ * íconos, estilos globales) y boot.js, que aplica el tamaño de texto, protege
+ * las páginas con sesión y precarga la navegación.
+ */
+import '../styles/tokens.css';
+import '../styles/base.css';
+import '../styles/components.css';
+import icons from '../js/data/icon-names.json';
+import { APP, BASE } from '../js/core/config.js';
+
+interface Props {
+  title: string;
+  description?: string;
+  /** Página que exige sesión (zona /app/). */
+  auth?: boolean;
+  noindex?: boolean;
+}
+const { title, description = 'Plantillas guiadas para derechos de petición, tutelas, reclamos y denuncias, y un buscador de canales oficiales de Colombia. Herramienta de apoyo, no canal oficial.', auth = false, noindex = auth } = Astro.props;
+const fullTitle = title === APP.name ? `${APP.name} · ${APP.tagline}` : `${title} · ${APP.name}`;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const iconsHref = `https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0..1,0&icon_names=${icons.join(',')}&display=block`;
+---
+<!doctype html>
+<html lang="es-CO" class="no-js" data-auth={auth ? 'required' : undefined}>
+<head>
+  <meta charset="utf-8">
+  <script is:inline src={`${BASE}assets/js/boot.js`}></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{fullTitle}</title>
+  <meta name="description" content={description}>
+  {noindex ? <meta name="robots" content="noindex, nofollow"> : <link rel="canonical" href={canonical}>}
+  <meta name="theme-color" content="#ffffff">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_CO">
+  <meta property="og:site_name" content={APP.name}>
+  <meta property="og:title" content={fullTitle}>
+  <meta property="og:description" content={description}>
+  <meta property="og:url" content={canonical}>
+  <link rel="icon" href={`${BASE}assets/img/favicon.svg`} type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@400..700&display=swap">
+  <link rel="stylesheet" href={iconsHref}>
+  <slot name="head" />
+</head>
+<body>
+  <slot />
+  <script>
+    import '../scripts/chrome.js';
+  </script>
+</body>
+</html>

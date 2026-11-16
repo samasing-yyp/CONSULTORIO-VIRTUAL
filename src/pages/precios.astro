@@ -1,0 +1,115 @@
+---
+import PublicLayout from '../layouts/PublicLayout.astro';
+import '../styles/pages/pricing.css';
+import { url } from '../js/core/config.js';
+---
+<PublicLayout title='Precios' description='Planes Básico y Premium de Consultoría Digital.' active='precios'>
+  <main id="contenido">
+    <section class="pricing-hero">
+      <div class="container">
+        <span class="eyebrow reveal"><span class="ms" aria-hidden="true">sell</span>Planes</span>
+        <h1 class="reveal" style="--reveal-delay:60ms">Elige cómo quieres avanzar</h1>
+        <p class="lead reveal" style="--reveal-delay:120ms">Texto de ejemplo: empieza gratis con lo esencial y pasa a Premium cuando necesites más plantillas y guardar tus documentos.</p>
+      </div>
+    </section>
+
+    <section class="section tight">
+      <div class="container">
+        <div class="plans">
+          <article class="plan reveal">
+            <div class="plan-head">
+              <span class="plan-icon"><span class="ms" aria-hidden="true">person</span></span>
+              <h2>Básico</h2>
+              <p class="muted">Texto de ejemplo para describir a quién está dirigido este plan.</p>
+            </div>
+            <div class="plan-price"><strong>$0</strong><span>para siempre</span></div>
+            <a class="btn btn-outline btn-block" href={url('ingresar/') + '?plan=basico'}>Empezar gratis</a>
+            <ul class="plan-list">
+              <li><span class="ms" aria-hidden="true">check</span>Beneficio 1</li>
+              <li><span class="ms" aria-hidden="true">check</span>Beneficio 2</li>
+              <li><span class="ms" aria-hidden="true">check</span>Beneficio 3</li>
+              <li><span class="ms" aria-hidden="true">check</span>Beneficio 4</li>
+              <li class="off"><span class="ms" aria-hidden="true">remove</span>Beneficio 5 Premium</li>
+              <li class="off"><span class="ms" aria-hidden="true">remove</span>Beneficio 6 Premium</li>
+            </ul>
+          </article>
+
+          <article class="plan featured reveal" style="--reveal-delay:80ms">
+            <span class="plan-ribbon">Recomendado</span>
+            <div class="plan-head">
+              <span class="plan-icon sun"><span class="ms fill" aria-hidden="true">workspace_premium</span></span>
+              <h2>Premium</h2>
+              <p class="muted">Texto de ejemplo para describir a quién está dirigido este plan.</p>
+            </div>
+            <div class="plan-price"><strong>$00.000</strong><span>COP / mes</span></div>
+            <a class="btn btn-primary btn-block" href={url('ingresar/') + '?plan=premium'}>Probar Premium</a>
+            <ul class="plan-list">
+              <li><span class="ms" aria-hidden="true">check</span>Todo lo del plan Básico</li>
+              <li><span class="ms" aria-hidden="true">check</span>Beneficio 1 Premium</li>
+              <li><span class="ms" aria-hidden="true">check</span>Beneficio 2 Premium</li>
+              <li><span class="ms" aria-hidden="true">check</span>Beneficio 3 Premium</li>
+              <li><span class="ms" aria-hidden="true">check</span>Beneficio 4 Premium</li>
+              <li><span class="ms" aria-hidden="true">check</span>Beneficio 5 Premium</li>
+            </ul>
+          </article>
+        </div>
+        <p class="plans-note subtle reveal"><span class="ms" aria-hidden="true">info</span>Precios de ejemplo. Ningún plan reemplaza la asesoría de un abogado ni es un canal oficial de trámites.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container narrow">
+        <div class="reveal">
+          <span class="eyebrow"><span class="ms" aria-hidden="true">table_chart</span>Comparación</span>
+          <h2>Qué incluye cada plan</h2>
+        </div>
+        <div class="compare-wrap reveal">
+          <table class="compare">
+            <thead>
+              <tr><th scope="col">Función</th><th scope="col">Básico</th><th scope="col">Premium</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Buscador de canales oficiales</th><td><span class="ms yes" aria-label="Incluido">check_circle</span></td><td><span class="ms yes" aria-label="Incluido">check_circle</span></td></tr>
+              <tr><th scope="row">Derecho de petición, denuncia y pérdida de documentos</th><td><span class="ms yes" aria-label="Incluido">check_circle</span></td><td><span class="ms yes" aria-label="Incluido">check_circle</span></td></tr>
+              <tr><th scope="row">Acción de tutela guiada</th><td><span class="ms no" aria-label="No incluido">remove</span></td><td><span class="ms yes" aria-label="Incluido">check_circle</span></td></tr>
+              <tr><th scope="row">Conciliación y documentos de empresa</th><td><span class="ms no" aria-label="No incluido">remove</span></td><td><span class="ms yes" aria-label="Incluido">check_circle</span></td></tr>
+              <tr><th scope="row">Guardar borradores</th><td><span class="ms no" aria-label="No incluido">remove</span></td><td><span class="ms yes" aria-label="Incluido">check_circle</span></td></tr>
+              <tr><th scope="row">Beneficio de ejemplo</th><td>Límite de ejemplo</td><td>Ilimitado</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container narrow">
+        <div class="reveal">
+          <span class="eyebrow"><span class="ms" aria-hidden="true">help</span>Preguntas frecuentes</span>
+          <h2>Dudas comunes</h2>
+        </div>
+        <div class="accordion reveal">
+          <details>
+            <summary>¿Consultoría Digital reemplaza a un abogado?<span class="ms" aria-hidden="true">expand_more</span></summary>
+            <div class="acc-body">No. Es una herramienta de apoyo para preparar documentos sencillos. Para casos complejos te recomendamos buscar un consultorio jurídico universitario, la Defensoría del Pueblo o la personería de tu municipio.</div>
+          </details>
+          <details>
+            <summary>¿Mis documentos tienen validez?<span class="ms" aria-hidden="true">expand_more</span></summary>
+            <div class="acc-body">Texto de ejemplo. La validez depende de que firmes el documento y lo radiques ante la entidad correcta, por su canal oficial.</div>
+          </details>
+          <details>
+            <summary>¿Puedo cancelar Premium cuando quiera?<span class="ms" aria-hidden="true">expand_more</span></summary>
+            <div class="acc-body">Texto de ejemplo para la política de cancelación.</div>
+          </details>
+          <details>
+            <summary>¿Qué pasa con mis datos?<span class="ms" aria-hidden="true">expand_more</span></summary>
+            <div class="acc-body">Texto de ejemplo. Consulta la sección de <a href={url('terminos/') + '#habeas-data'}>habeas data y uso de datos</a>.</div>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+</PublicLayout>
+
+<script>
+  import '../js/pages/public.js';
+</script>

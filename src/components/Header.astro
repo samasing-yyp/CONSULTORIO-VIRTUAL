@@ -1,0 +1,38 @@
+---
+/**
+ * Encabezado de las páginas públicas. El botón de la derecha dice «Ingresar»;
+ * si hay sesión, src/scripts/chrome.js lo cambia por «Ir al directorio».
+ */
+import BrandMark from './BrandMark.astro';
+import Icon from './Icon.astro';
+import { APP, ROUTES, url } from '../js/core/config.js';
+
+interface Props { active?: string }
+const { active } = Astro.props;
+const links = [
+  ['home', 'Inicio', ROUTES.home],
+  ['precios', 'Precios', ROUTES.precios],
+  ['terminos', 'Términos', ROUTES.terminos],
+];
+---
+<div class="chrome-header">
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+  <header class="site-header" data-chrome>
+    <div class="container">
+      <a class="brand" href={url(ROUTES.home)} aria-label={`${APP.name}, inicio`}><BrandMark /><span>{APP.name}</span></a>
+      <button class="icon-btn menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav-principal"><Icon name="menu" /></button>
+      <nav class="nav" id="nav-principal" aria-label="Principal">
+        {links.map(([id, label, route]) => (
+          <a href={url(route)} aria-current={id === active ? 'page' : undefined}>{label}</a>
+        ))}
+        <span class="mobile-only">
+          <a class="btn btn-primary btn-block" href={url(ROUTES.ingresar)} data-session-cta><Icon name="login" /><span>Ingresar</span></a>
+        </span>
+      </nav>
+      <div class="header-actions desktop-only">
+        <button class="icon-btn" type="button" data-action="text-size" title="Cambiar tamaño de texto" aria-label="Cambiar tamaño de texto"><Icon name="text_increase" /></button>
+        <a class="btn btn-primary btn-sm" href={url(ROUTES.ingresar)} data-session-cta><Icon name="login" /><span>Ingresar</span></a>
+      </div>
+    </div>
+  </header>
+</div>

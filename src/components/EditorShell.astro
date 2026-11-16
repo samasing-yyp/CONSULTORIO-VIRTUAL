@@ -1,0 +1,41 @@
+---
+/**
+ * Página de editor de un documento. El HTML ya trae el título, el resumen y
+ * para qué sirve (se ven de inmediato y sin JavaScript); src/js/tools/editor.js
+ * monta encima el asistente, la vista previa y la descarga.
+ */
+import Icon from './Icon.astro';
+
+interface Props {
+  doc: { id: string; title: string; summary: string; icon: string; tone?: string; situation?: string; entity?: string; deadline?: string; confidential?: boolean };
+  back: { href: string; label: string };
+}
+const { doc, back } = Astro.props;
+---
+<main id="contenido" data-root data-template-id={doc.id}>
+  <div class="editor-bar">
+    <div class="container-wide eb-inner">
+      <a class="icon-btn" href={back.href} aria-label={back.label} title={back.label}><Icon name="arrow_back" /></a>
+      <div class="eb-title">
+        <div class:list={['card-icon', doc.tone]}><Icon name={doc.icon} /></div>
+        <div>
+          <h1>{doc.title}</h1>
+          <span class="eb-sub">{doc.summary}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container editor-loading">
+    <div class="loading-state"><Icon name="progress_activity" /><span>Preparando el editor…</span></div>
+    <dl class="editor-facts">
+      {doc.situation && <div><dt>Cuándo usarlo</dt><dd>{doc.situation}</dd></div>}
+      {doc.entity && <div><dt>Ante quién</dt><dd>{doc.entity}</dd></div>}
+      {doc.deadline && <div><dt>Plazo clave</dt><dd>{doc.deadline}</dd></div>}
+    </dl>
+    <noscript><p class="notice danger">Para llenar y descargar el documento necesitas activar JavaScript en tu navegador.</p></noscript>
+  </div>
+</main>
+
+<script>
+  import '../js/tools/editor.js';
+</script>

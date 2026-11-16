@@ -1,0 +1,98 @@
+---
+import AppLayout from '../../layouts/AppLayout.astro';
+import Icon from '../../components/Icon.astro';
+import DocCard from '../../components/DocCard.astro';
+import { TOOLS, ROUTES, url } from '../../js/core/config.js';
+import { AREAS } from '../../js/data/areas.js';
+import { minutasOf } from '../../js/data/minutas/registry.js';
+import { GENERAL } from '../../js/data/catalog.js';
+import { CHANNELS } from '../../js/data/channels.js';
+
+const active = TOOLS.filter((t) => t.status === 'activo');
+const soon = TOOLS.filter((t) => t.status !== 'activo');
+const featured = CHANNELS.filter((c) => c.featured);
+---
+<AppLayout title="Directorio" active="directorio">
+  <main id="contenido">
+    <section class="app-hero">
+      <div class="container">
+        <span class="eyebrow" data-today></span>
+        <h1 data-greeting>Hola</h1>
+        <p class="lead muted">¿Qué necesitas resolver hoy? Elige una herramienta para empezar.</p>
+      </div>
+    </section>
+
+    <section class="app-section">
+      <div class="container">
+        <div class="app-section-head"><h2>Herramientas</h2></div>
+        <div class="tool-grid">
+          {active.map((t) => (
+            <a class:list={['card is-interactive tool-card big', t.tone]} href={url(t.route)}>
+              <div class:list={['card-icon', t.tone]}><Icon name={t.icon} /></div>
+              <h3>{t.title}</h3>
+              <p>{t.desc}</p>
+              <span class="go">Abrir <Icon name="arrow_forward" /></span>
+            </a>
+          ))}
+        </div>
+        <div class="soon-grid">
+          {soon.map((t) => (
+            <div class="soon-card">
+              <div class:list={['card-icon', t.tone]}><Icon name={t.icon} /></div>
+              <div><strong>{t.title}</strong>{t.desc} <span class="badge">Próximamente</span></div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="app-section">
+      <div class="container">
+        <div class="app-section-head">
+          <div><h2>Áreas especializadas</h2><p class="subtle">Rutas, plazos y minutas para los problemas más frecuentes.</p></div>
+        </div>
+        <div class="area-grid">
+          {AREAS.map((a) => (
+            <a class:list={['card is-interactive area-card', `tone-${a.tone}`]} href={url(a.route)}>
+              <div class:list={['card-icon', a.tone]}><Icon name={a.icon} /></div>
+              <h3>{a.title}</h3>
+              <p>{a.tagline}</p>
+              <span class="area-count">{minutasOf(a.id).length} documentos · ruta y plazos</span>
+              <span class="go">Entrar <Icon name="arrow_forward" /></span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="app-section" data-plan-section></section>
+
+    <section class="app-section">
+      <div class="container">
+        <div class="app-section-head">
+          <h2>Documentos generales</h2>
+          <a class="btn btn-ghost btn-sm" href={url(ROUTES.documentos)}>Ver todos<Icon name="arrow_forward" /></a>
+        </div>
+        <div class="tpl-grid">
+          {GENERAL.map((d) => <DocCard doc={d} variant="tpl" />)}
+        </div>
+      </div>
+    </section>
+
+    <section class="app-section">
+      <div class="container">
+        <div class="app-section-head">
+          <h2>Canales oficiales más usados</h2>
+          <a class="btn btn-ghost btn-sm" href={url(ROUTES.canales)}>Buscar otro<Icon name="arrow_forward" /></a>
+        </div>
+        <div class="channel-chips">
+          {featured.map((c) => <a class="chip" href={c.url} target="_blank" rel="noopener">{c.service} <Icon name="open_in_new" /></a>)}
+        </div>
+      </div>
+    </section>
+  </main>
+</AppLayout>
+
+<script>
+  import '../../js/pages/app-home.js';
+</script>

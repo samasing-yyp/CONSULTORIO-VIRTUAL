@@ -1,0 +1,40 @@
+---
+/**
+ * Tarjeta de un documento (plantilla general o minuta).
+ *  variant="gal"  tarjeta grande de la galería
+ *  variant="tpl"  tarjeta compacta del directorio
+ * Las tarjetas Premium llevan data-plan="premium": chrome.js las marca con
+ * candado si el plan del usuario no las incluye.
+ */
+import Icon from './Icon.astro';
+
+interface Props {
+  doc: { id: string; title: string; summary: string; icon: string; tone?: string; plan?: string; href: string; entity?: string; situation?: string; code?: string; category?: string; que?: string };
+  variant?: 'gal' | 'tpl';
+  delay?: number;
+}
+const { doc, variant = 'gal', delay = 0 } = Astro.props;
+const premium = doc.plan === 'premium';
+const search = [doc.title, doc.summary, doc.situation, doc.entity, doc.que, doc.code].filter(Boolean).join(' ');
+---
+{variant === 'gal' ? (
+  <a class="card is-interactive gal-card reveal" style={`--reveal-delay:${delay}ms`} href={doc.href}
+     data-plan={doc.plan} data-doc={doc.id} data-category={doc.category} data-search={search}>
+    <div class="gal-card-top">
+      <div class:list={['card-icon', doc.tone]}><Icon name={doc.icon} /></div>
+      {premium
+        ? <span class="badge badge-premium" data-plan-badge><Icon name="workspace_premium" fill />Premium</span>
+        : <span class="badge badge-mint">Básico</span>}
+    </div>
+    <h3>{doc.title}</h3>
+    <p>{doc.summary}</p>
+    {doc.entity && <span class="gal-entity"><Icon name="account_balance" />{doc.entity}</span>}
+    <span class="go"><span data-go-label>Usar plantilla</span> <Icon name="arrow_forward" /></span>
+  </a>
+) : (
+  <a class="tpl-card" href={doc.href} data-plan={doc.plan} data-doc={doc.id}>
+    <div class:list={['card-icon', doc.tone]}><Icon name={doc.icon} /></div>
+    <div><strong>{doc.title}</strong><small>{doc.summary}</small></div>
+    {premium && <span class="badge badge-premium" data-plan-badge><Icon name="workspace_premium" fill />Premium</span>}
+  </a>
+)}

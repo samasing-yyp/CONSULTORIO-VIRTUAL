@@ -1,0 +1,61 @@
+---
+import AppLayout from '../../layouts/AppLayout.astro';
+import Icon from '../../components/Icon.astro';
+import ChannelCard from '../../components/ChannelCard.astro';
+import { CHANNELS, CHANNEL_CATEGORIES } from '../../js/data/channels.js';
+import '../../styles/pages/canales.css';
+
+const SUGGESTIONS = ['pasado judicial', 'duplicado de cédula', 'denunciar un robo', 'queja contra mi EPS', 'multas de tránsito', 'cuota alimentaria', 'crear empresa', 'abogado gratis'];
+// Mismo orden que la búsqueda vacía: destacados primero, luego por nombre
+const ordered = [...CHANNELS].sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0) || a.name.localeCompare(b.name, 'es'));
+const counts = CHANNELS.reduce((acc, c) => ((acc[c.category] = (acc[c.category] || 0) + 1), acc), {});
+---
+<AppLayout title="Canales oficiales" active="canales" description="Buscador de canales oficiales de Colombia: antecedentes, denuncias, tutelas, salud, servicios públicos y tránsito.">
+  <main id="contenido">
+    <section class="ch-hero">
+      <div class="container">
+        <span class="eyebrow"><Icon name="travel_explore" />Buscador de canales oficiales</span>
+        <h1>¿Qué trámite necesitas hacer?</h1>
+        <p class="lead muted">Escríbelo con tus palabras. Te llevamos a la página oficial de la entidad, sin intermediarios.</p>
+        <form class="ch-search" role="search" data-search-form>
+          <Icon name="search" />
+          <label class="visually-hidden" for="q">Buscar trámite o entidad</label>
+          <input id="q" type="search" name="q" autocomplete="off" placeholder="Ej.: pasado judicial, duplicado de cédula, queja EPS">
+          <button class="icon-btn" type="button" data-clear aria-label="Borrar búsqueda" hidden><Icon name="close" /></button>
+        </form>
+        <div class="ch-suggest">
+          <span class="subtle">Prueba:</span>
+          {SUGGESTIONS.map((s) => <button class="chip" type="button" data-s={s}>{s}</button>)}
+        </div>
+      </div>
+    </section>
+
+    <section class="app-section">
+      <div class="container">
+        <div class="ch-filters" role="toolbar" aria-label="Filtrar por tema">
+          {Object.entries(CHANNEL_CATEGORIES).map(([k, v]) => (
+            <button class="chip" type="button" data-cat={k} aria-pressed={k === 'todas' ? 'true' : 'false'}>
+              <Icon name={v.icon} />{v.label}<span class="count">{k === 'todas' ? CHANNELS.length : counts[k] || 0}</span>
+            </button>
+          ))}
+        </div>
+        <p class="ch-count subtle" data-count aria-live="polite">{CHANNELS.length} canales oficiales</p>
+        <div class="ch-grid" data-results>
+          {ordered.map((c) => <ChannelCard c={c} />)}
+        </div>
+        <div class="empty-state" data-empty hidden>
+          <Icon name="search_off" />
+          <span>No encontramos «<span data-empty-q></span>» en nuestro directorio. Búscalo en el portal único del Estado: <a data-govco href="https://www.gov.co/buscador" target="_blank" rel="noopener">buscar en gov.co <Icon name="open_in_new" /></a></span>
+        </div>
+        <div class="notice info ch-footnote">
+          <Icon name="verified_user" />
+          <div>Todos los enlaces llevan a sitios oficiales (.gov.co u operadores autorizados). Revisa siempre que la dirección del navegador sea la de la entidad antes de escribir tus datos. ¿Falta un canal? Búscalo en <a href="https://www.gov.co" target="_blank" rel="noopener">gov.co</a>.</div>
+        </div>
+      </div>
+    </section>
+  </main>
+</AppLayout>
+
+<script>
+  import '../../js/tools/canales.js';
+</script>

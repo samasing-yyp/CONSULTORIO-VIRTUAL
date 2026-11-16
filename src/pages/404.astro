@@ -1,0 +1,60 @@
+---
+/**
+ * GitHub Pages sirve este archivo para cualquier ruta inexistente. Si la
+ * dirección es una de las antiguas (*.html), redirige a la ruta nueva
+ * conservando ?consulta y #ancla; si no, muestra la página de error.
+ */
+import PublicLayout from '../layouts/PublicLayout.astro';
+import Icon from '../components/Icon.astro';
+import { BASE, ROUTES, url } from '../js/core/config.js';
+
+const LEGACY = {
+  'index.html': '',
+  'precios.html': ROUTES.precios,
+  'terminos.html': ROUTES.terminos,
+  'ingresar.html': ROUTES.ingresar,
+  'app/index.html': ROUTES.app,
+  'app/plantillas.html': 'app/plantillas/',
+  'app/canales.html': ROUTES.canales,
+};
+---
+<PublicLayout title="Página no encontrada" noindex footer={false}>
+  <script is:inline define:vars={{ BASE, LEGACY }}>
+    (function () {
+      var rest = location.pathname.indexOf(BASE) === 0 ? location.pathname.slice(BASE.length) : location.pathname.replace(/^\//, '');
+      if (Object.prototype.hasOwnProperty.call(LEGACY, rest)) {
+        location.replace(BASE + LEGACY[rest] + location.search + location.hash);
+      }
+    })();
+  </script>
+  <main id="contenido" class="nf">
+    <div class="container">
+      <div class="nf-code" aria-hidden="true">404</div>
+      <h1>No encontramos esta página</h1>
+      <p class="lead muted">Puede que la dirección haya cambiado o tenga un error. Desde el inicio llegas a todas las herramientas.</p>
+      <div class="nf-actions">
+        <a class="btn btn-primary" href={url(ROUTES.home)}><Icon name="home" />Ir al inicio</a>
+        <a class="btn btn-outline" href={url(ROUTES.app)}>Ir al directorio</a>
+      </div>
+      <div class="flag-line nf-flag" aria-hidden="true"></div>
+    </div>
+  </main>
+</PublicLayout>
+
+<style>
+  .nf { text-align: center; padding: clamp(3rem, 2rem + 6vw, 7rem) 0; }
+  .nf-code {
+    font-size: clamp(4.5rem, 3rem + 10vw, 8rem);
+    font-weight: 500;
+    letter-spacing: -0.05em;
+    line-height: 1;
+    background: linear-gradient(100deg, var(--navy-800) 10%, var(--navy-500) 55%, var(--rose-500) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .nf h1 { margin: var(--space-4) 0 var(--space-2); }
+  .nf .lead { margin: 0 auto var(--space-6); }
+  .nf-actions { display: flex; flex-wrap: wrap; gap: var(--space-2); justify-content: center; }
+  .nf-flag { margin: var(--space-7) auto 0; }
+</style>
